@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Учебный учет - Технический колледж</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1d29;
+            color: #e4e4e7;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.light-theme {
+            background: #f5f5f5;
+            color: #1a1d29;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .theme-toggle {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #2d3142;
+            color: #e4e4e7;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .light-theme .theme-toggle {
+            background: #e0e0e0;
+            color: #1a1d29;
+        }
+
+        .theme-toggle:hover {
+            background: #3d4252;
+        }
+
+        .light-theme .theme-toggle:hover {
+            background: #d0d0d0;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            background: #2d3142;
+            color: #e4e4e7;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .light-theme .tab {
+            background: #e0e0e0;
+            color: #1a1d29;
+        }
+
+        .tab:hover {
+            background: #3d4252;
+        }
+
+        .light-theme .tab:hover {
+            background: #d0d0d0;
+        }
+
+        .tab.active {
+            background: #5B8DEF;
+            color: white;
+        }
+
+        .content-box {
+            background: #2d3142;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .light-theme .content-box {
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 480px 1fr;
+            gap: 30px;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin-bottom: 25px;
+            color: #e4e4e7;
+        }
+
+        .light-theme h2 {
+            color: #1a1d29;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #a0a0a8;
+        }
+
+        .light-theme .form-group label {
+            color: #666666;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            background: #1a1d29;
+            color: #e4e4e7;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .light-theme .form-group input,
+        .light-theme .form-group select {
+            background: #f5f5f5;
+            color: #1a1d29;
+            border: 1px solid #e0e0e0;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            background: #252837;
+        }
+
+        .light-theme .form-group input:focus,
+        .light-theme .form-group select:focus {
+            background: #ffffff;
+            border-color: #5B8DEF;
+        }
+
+        .form-group input::placeholder {
+            color: #5a5a68;
+        }
+
+        .light-theme .form-group input::placeholder {
+            color: #999999;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-right: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #5B8DEF;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4a7dd9;
+        }
+
+        .btn-secondary {
+            background: #3d4252;
+            color: #e4e4e7;
+        }
+
+        .light-theme .btn-secondary {
+            background: #e0e0e0;
+            color: #1a1d29;
+        }
+
+        .btn-secondary:hover {
+            background: #4d5262;
+        }
+
+        .light-theme .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+            font-size: 13px;
+            padding: 8px 16px;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        .btn-info {
+            background: #10b981;
+            color: white;
+            font-size: 13px;
+            padding: 8px 16px;
+        }
+
+        .btn-info:hover {
+            background: #059669;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            background: #1a1d29;
+            color: #e4e4e7;
+            font-size: 14px;
+        }
+
+        .light-theme .search-box input {
+            background: #f5f5f5;
+            color: #1a1d29;
+            border: 1px solid #e0e0e0;
+        }
+
+        .student-card {
+            background: #1a1d29;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #3d4252;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .light-theme .student-card {
+            background: #f5f5f5;
+            border-color: #e0e0e0;
+        }
+
+        .student-card:hover {
+            background: #252837;
+            border-color: #5B8DEF;
+            transform: translateY(-2px);
+        }
+
+        .light-theme .student-card:hover {
+            background: #ffffff;
+            border-color: #5B8DEF;
+        }
+
+        .student-card.selected {
+            border-color: #5B8DEF;
+            background: #252837;
+        }
+
+        .light-theme .student-card.selected {
+            background: #ffffff;
+        }
+
+        .student-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #e4e4e7;
+        }
+
+        .light-theme .student-card h3 {
+            color: #1a1d29;
+        }
+
+        .student-card p {
+            font-size: 14px;
+            color: #a0a0a8;
+            margin-bottom: 5px;
+        }
+
+        .light-theme .student-card p {
+            color: #666666;
+        }
+
+        .student-card .actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background: #1a1d29;
+            color: #e4e4e7;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .light-theme th {
+            background: #f5f5f5;
+            color: #1a1d29;
+        }
+
+        td {
+            padding: 15px;
+            border-top: 1px solid #3d4252;
+            color: #e4e4e7;
+        }
+
+        .light-theme td {
+            border-top: 1px solid #e0e0e0;
+            color: #1a1d29;
+        }
+
+        tr {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        tr:hover {
+            background: #252837;
+        }
+
+        .light-theme tr:hover {
+            background: #f5f5f5;
+        }
+
+        tr.selected {
+            background: #252837;
+            border-left: 3px solid #5B8DEF;
+        }
+
+        .light-theme tr.selected {
+            background: #f5f5f5;
+        }
+
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .schedule-table {
+            background: #1a1d29;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .light-theme .schedule-table {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+        }
+
+        .schedule-table table {
+            margin: 0;
+        }
+
+        .schedule-table th {
+            background: #2d3142;
+            padding: 12px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .light-theme .schedule-table th {
+            background: #e0e0e0;
+        }
+
+        .schedule-table td {
+            padding: 20px 10px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .lesson-card {
+            background: #5B8DEF;
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .lesson-card .room {
+            font-size: 11px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .export-btn {
+            background: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .export-btn:hover {
+            background: #059669;
+        }
+
+        .schedule-title {
+            background: #5B8DEF;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .schedule-header select {
+            padding: 10px 15px;
+            background: #1a1d29;
+            color: #e4e4e7;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .light-theme .schedule-header select {
+            background: #f5f5f5;
+            color: #1a1d29;
+            border: 1px solid #e0e0e0;
+        }
+
+        .schedule-header label {
+            margin-right: 10px;
+            color: #a0a0a8;
+        }
+
+        .light-theme .schedule-header label {
+            color: #666666;
+        }
+
+        @media (max-width: 1200px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div></div>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span id="themeIcon">🌙</span>
+                <span id="themeText">Светлая тема</span>
+            </button>
+        </div>
+
+        <!-- Табы -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('students')">Студенты</button>
+            <button class="tab" onclick="switchTab('groups')">Группы</button>
+            <button class="tab" onclick="switchTab('subjects')">Предметы</button>
+            <button class="tab" onclick="switchTab('schedule')">Расписание</button>
+        </div>
+
+        <!-- Вкладка Студенты -->
+        <div id="students" class="tab-content active">
+            <div class="two-column">
+                <div class="content-box">
+                    <h2>Управление студентами</h2>
+                    <div class="form-group">
+                        <label>Имя</label>
+                        <input type="text" id="studentName" placeholder="Иван">
+                    </div>
+                    <div class="form-group">
+                        <label>Фамилия</label>
+                        <input type="text" id="studentSurname" placeholder="Колпаков">
+                    </div>
+                    <div class="form-group">
+                        <label>Группа</label>
+                        <select id="studentGroup">
+                            <option value="">Не указана</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Эл. почта</label>
+                        <input type="email" id="studentEmail" placeholder="email@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Телефон</label>
+                        <input type="tel" id="studentPhone" placeholder="+7 900 000 00 00">
+                    </div>
+                    <button class="btn btn-primary" onclick="addStudent()">Добавить студента</button>
+                    <button class="btn btn-secondary" onclick="clearStudentForm()">Обновить список</button>
+                </div>
+
+                <div class="content-box">
+                    <h2>Список студентов</h2>
+                    <div class="search-box">
+                        <input type="text" id="searchStudent" placeholder="Поиск" onkeyup="filterStudents()">
+                    </div>
+                    <div id="studentsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка Группы -->
+        <div id="groups" class="tab-content">
+            <div class="two-column">
+                <div class="content-box">
+                    <h2>Управление группами</h2>
+                    <div class="form-group">
+                        <label>Название группы</label>
+                        <input type="text" id="groupName" placeholder="ИСП.23.1А">
+                    </div>
+                    <div class="form-group">
+                        <label>Описание</label>
+                        <input type="text" id="groupDescription" placeholder="Информационные системы">
+                    </div>
+                    <button class="btn btn-primary" onclick="addGroup()">Добавить группу</button>
+                    <button class="btn btn-secondary" onclick="clearGroupForm()">Обновить список</button>
+                </div>
+
+                <div class="content-box">
+                    <h2>Список групп</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Описание</th>
+                            </tr>
+                        </thead>
+                        <tbody id="groupsList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка Предметы -->
+        <div id="subjects" class="tab-content">
+            <div class="two-column">
+                <div class="content-box">
+                    <h2>Управление предметами</h2>
+                    <div class="form-group">
+                        <label>Название предмета</label>
+                        <input type="text" id="subjectName" placeholder="Математика">
+                    </div>
+                    <div class="form-group">
+                        <label>Описание</label>
+                        <input type="text" id="subjectDescription" placeholder="Алгебра и геометрия">
+                    </div>
+                    <button class="btn btn-primary" onclick="addSubject()">Добавить предмет</button>
+                    <button class="btn btn-secondary" onclick="clearSubjectForm()">Обновить список</button>
+                </div>
+
+                <div class="content-box">
+                    <h2>Список предметов</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Описание</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subjectsList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка Расписание -->
+        <div id="schedule" class="tab-content">
+            <div class="content-box">
+                <div class="schedule-header">
+                    <div>
+                        <label>Выбор группы</label>
+                        <select id="scheduleGroupSelect" onchange="loadSchedule()">
+                            <option value="">Выберите группу</option>
+                        </select>
+                    </div>
+                    <button class="export-btn" onclick="exportSchedule()">
+                        📊 Экспорт расписания в Excel
+                    </button>
+                </div>
+
+                <div id="scheduleTitle"></div>
+
+                <div class="schedule-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Пара</th>
+                                <th>Понедельник</th>
+                                <th>Вторник</th>
+                                <th>Среда</th>
+                                <th>Четверг</th>
+                                <th>Пятница</th>
+                                <th>Суббота</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scheduleTable">
+                            <tr>
+                                <td>1 пара</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>2 пара</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>3 пара</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>4 пара</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api';
+        let currentStudentId = null;
+        let currentGroupId = null;
+        let currentSubjectId = null;
+        let groups = [];
+        let subjects = [];
+
+        // Инициализация темы при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                updateThemeButton();
+            }
+        });
+
+        // Переключение темы
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            updateThemeButton();
+        }
+
+        function updateThemeButton() {
+            const isLight = document.body.classList.contains('light-theme');
+            document.getElementById('themeIcon').textContent = isLight ? '☀️' : '🌙';
+            document.getElementById('themeText').textContent = isLight ? 'Темная тема' : 'Светлая тема';
+        }
+
+        // Переключение табов
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'students') loadStudents();
+            if (tabName === 'groups') loadGroups();
+            if (tabName === 'subjects') loadSubjects();
+            if (tabName === 'schedule') {
+                loadGroupsForSchedule();
+                loadSchedule();
+            }
+        }
+
+        // === СТУДЕНТЫ ===
+        async function loadStudents() {
+            const response = await fetch(`${API_URL}/students`);
+            const students = await response.json();
+            const groupsResponse = await fetch(`${API_URL}/groups`);
+            groups = await groupsResponse.json();
+
+            const studentsList = document.getElementById('studentsList');
+            studentsList.innerHTML = students.map(student => {
+                const group = groups.find(g => g.id === student.group_id);
+                return `
+                    <div class="student-card" onclick="selectStudent(${student.id}, event)">
+                        <h3>${student.surname} ${student.name}</h3>
+                        <p><strong>Группа:</strong> ${group ? group.name : 'Не указана'} | <strong>Email:</strong> ${student.email || 'Не указан'} | <strong>Телефон:</strong> ${student.phone || 'Не указан'}</p>
+                        <div class="actions">
+                            <button class="btn btn-success" onclick="exportWordCertificate(${student.id}, event)">📄 Справка Word</button>
+                            <button class="btn btn-info" onclick="exportPdfCertificate(${student.id}, event)">📕 Справка PDF</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Обновление select группы
+            const groupSelect = document.getElementById('studentGroup');
+            groupSelect.innerHTML = '<option value="">Не указана</option>' +
+                groups.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
+        }
+
+        function selectStudent(id, event) {
+            // Если клик был по кнопке, не выбираем студента
+            if (event.target.tagName === 'BUTTON') {
+                return;
+            }
+
+            // Снимаем выделение со всех карточек
+            document.querySelectorAll('.student-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+
+            // Выделяем текущую карточку
+            event.currentTarget.classList.add('selected');
+
+            // Загружаем данные студента в форму
+            fetch(`${API_URL}/students`)
+                .then(res => res.json())
+                .then(students => {
+                    const student = students.find(s => s.id === id);
+                    if (student) {
+                        document.getElementById('studentName').value = student.name;
+                        document.getElementById('studentSurname').value = student.surname;
+                        document.getElementById('studentGroup').value = student.group_id || '';
+                        document.getElementById('studentEmail').value = student.email || '';
+                        document.getElementById('studentPhone').value = student.phone || '';
+                        currentStudentId = id;
+                    }
+                });
+        }
+
+        async function addStudent() {
+            const data = {
+                name: document.getElementById('studentName').value,
+                surname: document.getElementById('studentSurname').value,
+                group_id: parseInt(document.getElementById('studentGroup').value) || null,
+                email: document.getElementById('studentEmail').value || null,
+                phone: document.getElementById('studentPhone').value || null
+            };
+
+            if (!data.name || !data.surname) {
+                alert('Заполните имя и фамилию!');
+                return;
+            }
+
+            if (currentStudentId) {
+                await fetch(`${API_URL}/students/${currentStudentId}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                currentStudentId = null;
+            } else {
+                await fetch(`${API_URL}/students`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+            }
+
+            clearStudentForm();
+            loadStudents();
+        }
+
+        function clearStudentForm() {
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentSurname').value = '';
+            document.getElementById('studentGroup').value = '';
+            document.getElementById('studentEmail').value = '';
+            document.getElementById('studentPhone').value = '';
+            currentStudentId = null;
+
+            // Снимаем выделение
+            document.querySelectorAll('.student-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+
+            loadStudents();
+        }
+
+        function filterStudents() {
+            const search = document.getElementById('searchStudent').value.toLowerCase();
+            const cards = document.querySelectorAll('.student-card');
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(search) ? 'block' : 'none';
+            });
+        }
+
+        function exportWordCertificate(studentId, event) {
+            event.stopPropagation();
+            window.open(`${API_URL}/export/student/${studentId}/certificate-word`, '_blank');
+        }
+
+        function exportPdfCertificate(studentId, event) {
+            event.stopPropagation();
+            window.open(`${API_URL}/export/student/${studentId}/certificate-pdf`, '_blank');
+        }
+
+        // === ГРУППЫ ===
+        async function loadGroups() {
+            const response = await fetch(`${API_URL}/groups`);
+            groups = await response.json();
+
+            const groupsList = document.getElementById('groupsList');
+            groupsList.innerHTML = groups.map(group => `
+                <tr onclick="selectGroup(${group.id})" class="${currentGroupId === group.id ? 'selected' : ''}">
+                    <td>${group.id}</td>
+                    <td>${group.name}</td>
+                    <td>${group.description || '-'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function selectGroup(id) {
+            // Снимаем выделение со всех строк
+            document.querySelectorAll('#groupsList tr').forEach(row => {
+                row.classList.remove('selected');
+            });
+
+            // Выделяем текущую строку
+            event.currentTarget.classList.add('selected');
+
+            // Загружаем данные группы в форму
+            const group = groups.find(g => g.id === id);
+            if (group) {
+                document.getElementById('groupName').value = group.name;
+                document.getElementById('groupDescription').value = group.description || '';
+                currentGroupId = id;
+            }
+        }
+
+        async function addGroup() {
+            const data = {
+                name: document.getElementById('groupName').value,
+                description: document.getElementById('groupDescription').value || null
+            };
+
+            if (!data.name) {
+                alert('Заполните название группы!');
+                return;
+            }
+
+            if (currentGroupId) {
+                await fetch(`${API_URL}/groups/${currentGroupId}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                currentGroupId = null;
+            } else {
+                await fetch(`${API_URL}/groups`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+            }
+
+            clearGroupForm();
+            loadGroups();
+        }
+
+        function clearGroupForm() {
+            document.getElementById('groupName').value = '';
+            document.getElementById('groupDescription').value = '';
+            currentGroupId = null;
+            loadGroups();
+        }
+
+        // === ПРЕДМЕТЫ ===
+        async function loadSubjects() {
+            const response = await fetch(`${API_URL}/subjects`);
+            subjects = await response.json();
+
+            const subjectsList = document.getElementById('subjectsList');
+            subjectsList.innerHTML = subjects.map(subject => `
+                <tr onclick="selectSubject(${subject.id})" class="${currentSubjectId === subject.id ? 'selected' : ''}">
+                    <td>${subject.id}</td>
+                    <td>${subject.name}</td>
+                    <td>${subject.description || '-'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function selectSubject(id) {
+            // Снимаем выделение со всех строк
+            document.querySelectorAll('#subjectsList tr').forEach(row => {
+                row.classList.remove('selected');
+            });
+
+            // Выделяем текущую строку
+            event.currentTarget.classList.add('selected');
+
+            // Загружаем данные предмета в форму
+            const subject = subjects.find(s => s.id === id);
+            if (subject) {
+                document.getElementById('subjectName').value = subject.name;
+                document.getElementById('subjectDescription').value = subject.description || '';
+                currentSubjectId = id;
+            }
+        }
+
+        async function addSubject() {
+            const data = {
+                name: document.getElementById('subjectName').value,
+                description: document.getElementById('subjectDescription').value || null
+            };
+
+            if (!data.name) {
+                alert('Заполните название предмета!');
+                return;
+            }
+
+            if (currentSubjectId) {
+                await fetch(`${API_URL}/subjects/${currentSubjectId}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                currentSubjectId = null;
+            } else {
+                await fetch(`${API_URL}/subjects`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+            }
+
+            clearSubjectForm();
+            loadSubjects();
+        }
+
+        function clearSubjectForm() {
+            document.getElementById('subjectName').value = '';
+            document.getElementById('subjectDescription').value = '';
+            currentSubjectId = null;
+            loadSubjects();
+        }
+
+        // === РАСПИСАНИЕ ===
+        async function loadGroupsForSchedule() {
+            const response = await fetch(`${API_URL}/groups`);
+            groups = await response.json();
+
+            const select = document.getElementById('scheduleGroupSelect');
+            select.innerHTML = '<option value="">Выберите группу</option>' +
+                groups.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
+        }
+
+        async function loadSchedule() {
+            const groupId = document.getElementById('scheduleGroupSelect').value;
+            if (!groupId) return;
+
+            const response = await fetch(`${API_URL}/schedule?group_id=${groupId}`);
+            const schedules = await response.json();
+
+            const subjectsResponse = await fetch(`${API_URL}/subjects`);
+            subjects = await subjectsResponse.json();
+
+            const group = groups.find(g => g.id == groupId);
+            document.getElementById('scheduleTitle').innerHTML =
+                `<div class="schedule-title">Расписание для группы: ${group.name}</div>`;
+
+            const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+            const tbody = document.getElementById('scheduleTable');
+            tbody.innerHTML = '';
+
+            for (let lesson = 1; lesson <= 4; lesson++) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${lesson} пара</td>`;
+
+                for (const day of days) {
+                    const td = document.createElement('td');
+                    const schedule = schedules.find(s => s.lesson_number === lesson && s.day_of_week === day);
+
+                    if (schedule) {
+                        const subject = subjects.find(s => s.id === schedule.subject_id);
+                        td.innerHTML = `
+                            <div class="lesson-card">
+                                <div>${subject ? subject.name : 'Неизвестно'}</div>
+                                ${schedule.room ? `<div class="room">${schedule.room}</div>` : ''}
+                            </div>
+                        `;
+                    } else {
+                        td.textContent = '-';
+                    }
+
+                    tr.appendChild(td);
+                }
+
+                tbody.appendChild(tr);
+            }
+        }
+
+        function exportSchedule() {
+            const groupId = document.getElementById('scheduleGroupSelect').value;
+            if (!groupId) {
+                alert('Выберите группу!');
+                return;
+            }
+            window.open(`${API_URL}/export/schedule/${groupId}/excel`, '_blank');
+        }
+
+        // Загрузка данных при старте
+        loadStudents();
+    </script>
+</body>
+</html>
